@@ -1,14 +1,14 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
-import 'package:assets_generator/assets_generator.dart';
-import 'package:assets_generator/src/arg/class_prefix.dart';
-import 'package:assets_generator/src/arg/package.dart';
 import 'package:build_runner_core/build_runner_core.dart';
 import 'package:io/ansi.dart';
 import 'package:path/path.dart';
+import 'package:sheepu_assets_generator/assets_generator.dart';
+import 'package:sheepu_assets_generator/src/arg/class_prefix.dart';
+import 'package:sheepu_assets_generator/src/arg/package.dart';
 
-const String argumentsFile = 'assets_generator_arguments';
+const String argumentsFile = 'sheepu_assets_generator_arguments';
 const String debugArguments = '-p example/ -t f --const-ignore .md';
 Future<void> main(List<String> arguments) async {
   //arguments = debugArguments.split(' ');

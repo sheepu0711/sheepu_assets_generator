@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "assets_generator",
+            "name": "sheepu_assets_generator",
             "request": "launch",
             "type": "dart"
         },

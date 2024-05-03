@@ -1,4 +1,4 @@
-library assets_generator;
+library sheepu_assets_generator;
 
 export 'src/arg/arg.dart';
 export 'src/arg/arg_parser.dart';
