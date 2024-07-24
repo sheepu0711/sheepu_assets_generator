@@ -1,91 +1,95 @@
+## 3.0.6
+
+- add package name to the prefix of the class name
+
 ## 3.0.5
 
-* add 'class-prefix', Whether use package name as prefix for the name of const Class
+- add 'class-prefix', Whether use package name as prefix for the name of const Class
 
 ## 3.0.4
 
-* Support image preview
+- Support image preview
 
 ## 3.0.3
 
-* Add '--package' command
+- Add '--package' command
 
 ## 3.0.2
 
-* Add ignore_for_file: constant_identifier_names for generated file
+- Add ignore_for_file: constant_identifier_names for generated file
 
 ## 3.0.1
 
-* Fix null safety error
-  
+- Fix null safety error
+
 ## 3.0.0
 
-* Null safety
-  
+- Null safety
+
 ## 2.3.0
 
-* Add '--folder-array' command
+- Add '--folder-array' command
 
 ## 2.2.0
 
-* Add '--const-array' command
-  
+- Add '--const-array' command
+
 ## 2.1.2
 
-* Fix --no-watch not working
-  
+- Fix --no-watch not working
+
 ## 2.1.1
 
-* Fix '# assets start' position
+- Fix '# assets start' position
 
 ## 2.1.0
 
-* Add '--const-ignore' command
+- Add '--const-ignore' command
 
 ## 2.0.9
 
-* Take care of empty assets
+- Take care of empty assets
 
 ## 2.0.8
 
-* Format yaml
+- Format yaml
 
 ## 2.0.7
 
-* Fix indent in yaml
+- Fix indent in yaml
 
 ## 2.0.6
 
-* Delete consts file and clean yaml when assets are empty
+- Delete consts file and clean yaml when assets are empty
 
 ## 2.0.5
 
-* Add license into yaml
-* Fix yaml error
-* Sort assets
+- Add license into yaml
+- Fix yaml error
+- Sort assets
 
 ## 2.0.4
 
-* Remove resolution image assets from yaml
+- Remove resolution image assets from yaml
 
 ## 2.0.3
 
-* Fix generate resolution image assets's consts
+- Fix generate resolution image assets's consts
 
 ## 2.0.2
 
-* Fix generate file when assets is empty
-* Fix error on windows
+- Fix generate file when assets is empty
+- Fix error on windows
 
 ## 2.0.0
 
-* Support watch
-* Support generate consts
+- Support watch
+- Support generate consts
 
 ## 1.1.1
 
-* Handle yaml has no assets node
+- Handle yaml has no assets node
 
 ## 1.0.0
 
-* Initial version, created by Stagehand
+- Initial version, created by Stagehand

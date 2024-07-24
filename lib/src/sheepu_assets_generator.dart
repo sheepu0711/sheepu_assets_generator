@@ -118,7 +118,7 @@ class Generator {
                   separator,
                   '/',
                 )
-                .replaceAll('lib/', 'packages/assets/'),
+                .replaceAll('assets/', 'packages/assets/'),
           );
         }
       }
