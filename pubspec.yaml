@@ -1,6 +1,6 @@
 name: sheepu_assets_generator
 description: The flutter tool to generate assets‘s configs(yaml) and consts automatically for single project and multiple modules.
-version: 3.0.6
+version: 3.0.7
 homepage: https://github.com/fluttercandies/sheepu_assets_generator
 
 environment:

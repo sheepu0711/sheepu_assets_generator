@@ -1,3 +1,7 @@
+## 3.0.7
+
+- change lib replace into packages/assets
+
 ## 3.0.6
 
 - add package name to the prefix of the class name
