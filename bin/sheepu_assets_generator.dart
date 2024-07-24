@@ -1,14 +1,14 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
-import 'package:assets_generator/assets_generator.dart';
-import 'package:assets_generator/src/arg/class_prefix.dart';
-import 'package:assets_generator/src/arg/package.dart';
+
 import 'package:build_runner_core/build_runner_core.dart';
 import 'package:io/ansi.dart';
 import 'package:path/path.dart';
+import 'package:sheepu_assets_generator/sheepu_assets_generator.dart';
+import 'package:sheepu_assets_generator/src/arg/package.dart';
 
-const String argumentsFile = 'assets_generator_arguments';
+const String argumentsFile = 'sheepu_assets_generator_arguments';
 const String debugArguments = '-p example/ -t f --const-ignore .md';
 Future<void> main(List<String> arguments) async {
   //arguments = debugArguments.split(' ');
@@ -36,16 +36,13 @@ Future<void> main(List<String> arguments) async {
   final ConstArray constArray = ConstArray();
   final FolderIgnore folderIgnore = FolderIgnore();
   final Package package = Package();
-  final ClassPrefix classPrefix = ClassPrefix();
   parseArgs(arguments);
   if (arguments.isEmpty || help.value!) {
     print(green.wrap(parser.usage));
     return;
   }
 
-  final PackageGraph packageGraph = path.value != null
-      ? await PackageGraph.forPath(path.value!)
-      : await PackageGraph.forThisPackage();
+  final PackageGraph packageGraph = path.value != null ? await PackageGraph.forPath(path.value!) : await PackageGraph.forThisPackage();
 
   final bool isWatch = watch.value!;
 
@@ -53,9 +50,7 @@ Future<void> main(List<String> arguments) async {
 
   final PackageNode rootNode = packageGraph.root;
   for (final PackageNode packageNode in packageGraph.allPackages.values.where(
-    (PackageNode packageGraph) =>
-        packageGraph.dependencyType == DependencyType.path &&
-        packageGraph.path.startsWith(rootNode.path),
+    (PackageNode packageGraph) => packageGraph.dependencyType == DependencyType.path && packageGraph.path.startsWith(rootNode.path),
   )) {
     Generator(
       packageGraph: packageNode,
@@ -65,13 +60,10 @@ Future<void> main(List<String> arguments) async {
       output: output.value,
       rule: rule,
       class1: class1,
-      constIgnore:
-          constIgnore.value != null ? RegExp(constIgnore.value!) : null,
+      constIgnore: constIgnore.value != null ? RegExp(constIgnore.value!) : null,
       constArray: constArray.value,
-      folderIgnore:
-          folderIgnore.value != null ? RegExp(folderIgnore.value!) : null,
+      folderIgnore: folderIgnore.value != null ? RegExp(folderIgnore.value!) : null,
       package: package.value ?? false,
-      classPrefix: classPrefix.value ?? false,
     ).go();
   }
 

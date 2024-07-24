@@ -1,14 +1,23 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
-import 'package:assets_generator/assets_generator.dart';
-import 'package:assets_generator/src/format.dart';
-import 'package:assets_generator/src/watcher.dart';
+
 import 'package:build_runner_core/build_runner_core.dart';
 import 'package:io/ansi.dart';
 import 'package:path/path.dart';
+import 'package:sheepu_assets_generator/sheepu_assets_generator.dart';
+import 'package:sheepu_assets_generator/src/format.dart';
+import 'package:sheepu_assets_generator/src/watcher.dart';
+
 import 'template.dart';
 import 'yaml.dart';
+
+const List<String> ignorePaths = <String>[
+  '.DS_Store',
+  'assets.preview.dart',
+  'gp_localization_generator.csv',
+  'gp_locale_keys.m.g.dart',
+];
 
 class Generator {
   Generator({
@@ -23,7 +32,6 @@ class Generator {
     this.constArray = false,
     this.folderIgnore,
     this.package = false,
-    this.classPrefix = false,
   });
 
   final PackageNode? packageGraph;
@@ -37,7 +45,6 @@ class Generator {
   final bool? constArray;
   final RegExp? folderIgnore;
   final bool package;
-  final bool classPrefix;
 
   Future<void> go() async {
     if (watch) {
@@ -85,6 +92,12 @@ class Generator {
   ) {
     dirList.add(directory);
 
+    bool isIgnoreName(String filePath) {
+      final String fileBaseName = basename(filePath);
+
+      return ignorePaths.contains(fileBaseName) || filePath.contains('.dart') || filePath.contains('.part');
+    }
+
     for (final FileSystemEntity item in directory.listSync()) {
       final FileStat fileStat = item.statSync();
       if (folderIgnore != null && folderIgnore!.hasMatch(item.path)) {
@@ -96,10 +109,17 @@ class Generator {
           dirList,
         );
       } else if (fileStat.type == FileSystemEntityType.file) {
-        if (basename(item.path) != '.DS_Store') {
-          assets.add(item.path
-              .replaceAll('${packageGraph!.path}$separator', '')
-              .replaceAll(separator, '/'));
+        // if (basename(item.path) != '.DS_Store') {
+        if (!isIgnoreName(item.path)) {
+          assets.add(
+            item.path
+                .replaceAll('${packageGraph!.path}$separator', '')
+                .replaceAll(
+                  separator,
+                  '/',
+                )
+                .replaceAll('lib/', 'packages/assets/'),
+          );
         }
       }
     }
@@ -110,8 +130,7 @@ class Generator {
     Map<String, String> miss,
   ) async {
     final String path = packageGraph!.path;
-    final String? fileName =
-        class1!.go('lwu', classPrefix ? packageGraph!.name : '');
+    final String? fileName = class1!.go('lwu');
 
     final File file = File(join(path, output, '$fileName.dart'));
 
@@ -138,7 +157,6 @@ class Generator {
       constIgnore,
       constArray,
       package,
-      classPrefix,
     );
     file.writeAsStringSync(
       formatDart(
@@ -176,7 +194,7 @@ class Generator {
       print(green.wrap(asset));
       final String r = asset.replaceAllMapped(regExp, (Match match) {
         return '';
-      });
+      }).replaceAll('lib/', 'packages/sheepu_assets/');
       //macth
       if (r != asset) {
         if (!assets.contains(r)) {
