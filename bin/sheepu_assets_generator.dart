@@ -36,13 +36,16 @@ Future<void> main(List<String> arguments) async {
   final ConstArray constArray = ConstArray();
   final FolderIgnore folderIgnore = FolderIgnore();
   final Package package = Package();
+  final FullPath fullPath = FullPath();
   parseArgs(arguments);
   if (arguments.isEmpty || help.value!) {
     print(green.wrap(parser.usage));
     return;
   }
 
-  final PackageGraph packageGraph = path.value != null ? await PackageGraph.forPath(path.value!) : await PackageGraph.forThisPackage();
+  final PackageGraph packageGraph = path.value != null
+      ? await PackageGraph.forPath(path.value!)
+      : await PackageGraph.forThisPackage();
 
   final bool isWatch = watch.value!;
 
@@ -50,7 +53,9 @@ Future<void> main(List<String> arguments) async {
 
   final PackageNode rootNode = packageGraph.root;
   for (final PackageNode packageNode in packageGraph.allPackages.values.where(
-    (PackageNode packageGraph) => packageGraph.dependencyType == DependencyType.path && packageGraph.path.startsWith(rootNode.path),
+    (PackageNode packageGraph) =>
+        packageGraph.dependencyType == DependencyType.path &&
+        packageGraph.path.startsWith(rootNode.path),
   )) {
     Generator(
       packageGraph: packageNode,
@@ -64,6 +69,7 @@ Future<void> main(List<String> arguments) async {
       constArray: constArray.value,
       folderIgnore: folderIgnore.value != null ? RegExp(folderIgnore.value!) : null,
       package: package.value ?? false,
+      fullPath: fullPath.value ?? false,
     ).go();
   }
 

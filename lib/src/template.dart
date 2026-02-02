@@ -45,6 +45,7 @@ class Template {
     this.constIgnore,
     this.constArray,
     this.package,
+    this.fullPath,
   );
   final PackageNode? packageGraph;
   final List<String> assets;
@@ -53,6 +54,7 @@ class Template {
   final RegExp? constIgnore;
   final bool? constArray;
   final bool package;
+  final bool fullPath;
 
   Future<String> generateFile(
     Map<String, String> miss,
@@ -87,7 +89,9 @@ class Template {
       final String? mimeType = lookupMimeType(asset);
       final bool isImage = mimeType != null && mimeType.startsWith('image/');
       if (isImage) {
-        previewImageSb.write(previewTemplate1.replaceAll('{0}', filedName).replaceAll('{1}', join(packageGraph!.path, filePath)));
+        previewImageSb.write(previewTemplate1
+            .replaceAll('{0}', filedName)
+            .replaceAll('{1}', join(packageGraph!.path, filePath)));
       }
 
       final String comment = isImage ? previewTemplate.replaceAll('{0}', filedName) : '';
@@ -119,7 +123,13 @@ class Template {
   }
 
   String formatFiled(String path) {
-    return '''static const String ${_formatFiledName(path)} = '$path';\n''';
+    String assetPath = path;
+    // When fullPath is enabled, prepend packages/{package_name}/ to the path
+    // But only if the path doesn't already start with 'packages/'
+    if (fullPath && !path.startsWith('packages/')) {
+      assetPath = 'packages/${packageGraph!.name}/$path';
+    }
+    return '''static const String ${_formatFiledName(path)} = '$assetPath';\n''';
   }
 
   String _formatFiledName(String path) {

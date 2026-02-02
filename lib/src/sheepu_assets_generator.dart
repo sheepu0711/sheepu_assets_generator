@@ -32,6 +32,7 @@ class Generator {
     this.constArray = false,
     this.folderIgnore,
     this.package = false,
+    this.fullPath = false,
   });
 
   final PackageNode? packageGraph;
@@ -45,6 +46,7 @@ class Generator {
   final bool? constArray;
   final RegExp? folderIgnore;
   final bool package;
+  final bool fullPath;
 
   Future<void> go() async {
     if (watch) {
@@ -95,7 +97,9 @@ class Generator {
     bool isIgnoreName(String filePath) {
       final String fileBaseName = basename(filePath);
 
-      return ignorePaths.contains(fileBaseName) || filePath.contains('.dart') || filePath.contains('.part');
+      return ignorePaths.contains(fileBaseName) ||
+          filePath.contains('.dart') ||
+          filePath.contains('.part');
     }
 
     for (final FileSystemEntity item in directory.listSync()) {
@@ -111,15 +115,15 @@ class Generator {
       } else if (fileStat.type == FileSystemEntityType.file) {
         // if (basename(item.path) != '.DS_Store') {
         if (!isIgnoreName(item.path)) {
-          assets.add(
-            item.path
-                .replaceAll('${packageGraph!.path}$separator', '')
-                .replaceAll(
-                  separator,
-                  '/',
-                )
-                .replaceAll('assets/', 'packages/assets/'),
-          );
+          String assetPath = item.path.replaceAll('${packageGraph!.path}$separator', '').replaceAll(
+                separator,
+                '/',
+              );
+          // Only apply old transformation when fullPath is disabled
+          if (!fullPath) {
+            assetPath = assetPath.replaceAll('assets/', 'packages/assets/');
+          }
+          assets.add(assetPath);
         }
       }
     }
@@ -157,6 +161,7 @@ class Generator {
       constIgnore,
       constArray,
       package,
+      fullPath,
     );
     file.writeAsStringSync(
       formatDart(
@@ -192,10 +197,14 @@ class Generator {
 
     for (final String asset in list) {
       print(green.wrap(asset));
-      final String r = asset.replaceAllMapped(regExp, (Match match) {
+      String r = asset.replaceAllMapped(regExp, (Match match) {
         return '';
-      }).replaceAll('lib/', 'packages/sheepu_assets/');
-      //macth
+      });
+      // Only apply old transformation when fullPath is disabled
+      if (!fullPath) {
+        r = r.replaceAll('lib/', 'packages/sheepu_assets/');
+      }
+      //match
       if (r != asset) {
         if (!assets.contains(r)) {
           // throw Exception(red
